@@ -78,3 +78,6 @@ takes a number and sets the transition speed in milliseconds for some elements
 ```javascript
 const myCarousel = ImageSlider({transitionSpeed: '1000'}, image1Source, ...)
 ```
+
+# License
+This project is licensed under the <a href="LICENSE.txt">MIT<a> license
