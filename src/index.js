@@ -36,6 +36,7 @@ export default function ImageSlider(...imageSources) {
       item.style.display = 'flex';
       item.style.justifyContent = 'center';
       item.style.alignItems = 'center';
+      item.style.transition = 'transform 600ms ease-in-out';
 
       item.style.backgroundColor = '#cccccc';
 
@@ -45,7 +46,7 @@ export default function ImageSlider(...imageSources) {
       const image = document.createElement('img');
       image.src = source;
       image.style.maxHeight = '100%';
-      image.style.maxWidth = '80%';
+      image.style.maxWidth = '90%';
       image.style.borderRadius = '12px';
 
       items.push(item);
@@ -56,16 +57,27 @@ export default function ImageSlider(...imageSources) {
 
   // sliding functionality
   let currentSlide = 0;
-  container.style.transition = 'transform 0.4s ease-in-out';
+  container.style.transition = 'transform 600ms ease-in-out';
 
   function showSlide(slide) {
     if (items.length < 1) return;
     container.style.transform = `translateX(${
-      -(slide * items[0].offsetWidth)
-      - (frame.offsetWidth / 2)
-      + items[0].offsetWidth
+      -(slide * items[slide].offsetWidth)
+      + ((frame.offsetWidth / 2)
+      - (items[slide].offsetWidth / 2))
     }px)`;
     currentSlide = slide;
+
+    // make adjacent slides smaller
+    if (currentSlide > 0 && items[currentSlide - 1]) {
+      items[currentSlide - 1].style.transform = `scale(0.5)
+      translateX(45%)`;
+    }
+    if (currentSlide < items.length - 1 && items[currentSlide + 1]) {
+      items[currentSlide + 1].style.transform = `scale(0.5)
+      translateX(-45%)`;
+    }
+    items[currentSlide].style.transform = '';
   }
 
   function nextSlide() {
