@@ -1,0 +1,29 @@
+{
+  "name": "@karim04/image-slider",
+  "version": "1.0.0",
+  "description": "A module for creating image sliders inside Javascript",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Karim0004/image-silder.git"
+  },
+  "keywords": [
+    "image-slider",
+    "image",
+    "slider"
+  ],
+  "author": "karim04",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Karim0004/image-silder/issues"
+  },
+  "homepage": "https://github.com/Karim0004/image-silder#readme",
+  "devDependencies": {
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
+}
