@@ -43,6 +43,8 @@ export default function ImageSlider(...imageSources) {
       }
       if (typeof param.slidingTimer === 'number') {
         slidingTimer = param.slidingTimer;
+      } else if (param.slidingTimer === false) {
+        slidingTimer = false;
       }
       if (typeof param.transitionFunc === 'string') {
         transitionFunc = param.transitionFunc;
@@ -142,8 +144,12 @@ export default function ImageSlider(...imageSources) {
   previous.firstChild.style.width = '100%';
   previous.firstChild.style.height = '100%';
   previous.style.width = '10%';
-  previous.style.height = '10%';
+  previous.style.aspectRatio = '1 / 1';
   previous.firstChild.style.fill = controlsColors;
+  previous.style.transition = 'all 0.2s ease-in-out';
+  previous.style.borderRadius = '50%'
+
+
 
   const next = document.createElement('div');
   next.innerHTML = `<svg xmlns= "http://www.w3.org/2000/svg" 
@@ -156,8 +162,38 @@ export default function ImageSlider(...imageSources) {
   next.firstChild.style.width = '100%';
   next.firstChild.style.height = '100%';
   next.style.width = '10%';
-  next.style.height = '10%';
+  next.style.aspectRatio = '1 / 1';
   next.firstChild.style.fill = controlsColors;
+  next.style.transition = 'all 0.2s ease-in-out';
+  next.style.borderRadius = '50%'
+
+  // adding hover effects to navigation buttons
+  const hoverEnlarge = function () {
+    this.style.transform = 'scale(1.2)';
+  }
+
+  const unhover = function () {
+    this.style.transform = '';
+  }
+
+  const flashButton = function () {
+    const button = this;
+    button.style.backgroundColor =controlsColors;
+    button.style.opacity = '0.5';
+  setTimeout(() => {
+    button.style.backgroundColor = '';
+    button.style.opacity = '';
+  }, 200);
+  }
+
+  next.onmouseover = hoverEnlarge;
+  previous.onmouseover = hoverEnlarge;
+  next.onmouseleave = unhover;
+  previous.onmouseleave = unhover;
+  previous.onmousedown = flashButton;
+  next.onmousedown = flashButton;
+
+
 
   // circles representing the slides for quick navigation
   const sliderCircles = document.createElement('div');
