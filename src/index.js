@@ -59,6 +59,7 @@ export default function ImageSlider(...imageSources) {
   container.style.transition = 'transform 0.4s ease-in-out';
 
   function showSlide(slide) {
+    if (items.length < 1) return;
     container.style.transform = `translateX(${
       -(slide * items[0].offsetWidth)
       - (frame.offsetWidth / 2)
@@ -68,10 +69,24 @@ export default function ImageSlider(...imageSources) {
   }
 
   function nextSlide() {
+    // if at last slide return to first slide
+    if ((currentSlide >= items.length - 1)
+      || (currentSlide < 0)) {
+      showSlide(0);
+      return;
+    }
+    // show next slide
     showSlide(currentSlide + 1);
   }
 
   function previousSlide() {
+    // if at last slide return to first slide
+    if ((currentSlide > items.length - 1)
+      || (currentSlide <= 0)) {
+      showSlide(items.length - 1);
+      return;
+    }
+    // show next slide
     showSlide(currentSlide - 1);
   }
 
@@ -102,6 +117,9 @@ export default function ImageSlider(...imageSources) {
   previous.onclick = previousSlide;
 
   slider.append(previous, next, sliderCircles);
+
+  setTimeout(() => showSlide(currentSlide), 10);
+  // setInterval(nextSlide, 5000);
 
   return slider;
 }
