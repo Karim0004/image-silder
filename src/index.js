@@ -47,7 +47,7 @@ export default function ImageSlider(...imageSources) {
       if (typeof param.transitionFunc === 'string') {
         transitionFunc = param.transitionFunc;
       }
-      if (typeof param.transitionSpeed === 'string') {
+      if (typeof param.transitionSpeed === 'number') {
         transitionSpeed = param.transitionSpeed;
       }
       break;
