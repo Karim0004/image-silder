@@ -8,11 +8,10 @@ export default function ImageSlider(...imageSources) {
   slider.style.minWidth = '200px';
   slider.style.maxWidth = '1000px';
   slider.style.maxHeight = '750px';
-  slider.style.backgroundColor = '#555555';
   slider.style.aspectRatio = '1.5 / 1';
   slider.style.width = '100%';
   slider.style.position = 'relative';
-  slider.style.padding = '0 24px';
+  slider.style.padding = '0 36px';
   slider.style.boxSizing = 'border-box';
 
   const frame = document.createElement('div');
@@ -29,6 +28,33 @@ export default function ImageSlider(...imageSources) {
   frame.style.margin = '0 auto';
   frame.style.height = '95%';
 
+  // default settings
+  let controlsColors = '#6b7280';
+  let slidingTimer = 5000;
+  let transitionSpeed = 600;
+  let transitionFunc = 'ease-in-out';
+
+  // checking for settings input
+  for (const param of imageSources) {
+    if (typeof param === 'object') {
+      
+      if (typeof param.color === 'string') {
+        controlsColors = param.color; 
+      }
+      if (typeof param.slidingTimer === 'number') {
+        slidingTimer = param.slidingTimer;
+      }
+      if (typeof param.transitionFunc === 'string') {
+        transitionFunc = param.transitionFunc;
+      }
+      if (typeof param.transitionSpeed === 'string') {
+        transitionSpeed = param.transitionSpeed;
+      }
+      break;
+    }
+  };
+
+  // creating slider items/images
   const items = [];
   imageSources.forEach((source) => {
     if (typeof source === 'string') {
@@ -36,9 +62,8 @@ export default function ImageSlider(...imageSources) {
       item.style.display = 'flex';
       item.style.justifyContent = 'center';
       item.style.alignItems = 'center';
-      item.style.transition = 'transform 600ms ease-in-out';
-
-      item.style.backgroundColor = '#cccccc';
+      item.style.transition = `transform 
+      ${transitionSpeed}ms ${transitionFunc}`;;
 
       item.style.height = '100%';
       item.style.aspectRatio = '1 / 1';
@@ -52,12 +77,13 @@ export default function ImageSlider(...imageSources) {
       items.push(item);
       item.appendChild(image);
       container.appendChild(item);
-    }
+    } 
   });
 
   // sliding functionality
   let currentSlide = 0;
-  container.style.transition = 'transform 600ms ease-in-out';
+  container.style.transition = `transform 
+  ${transitionSpeed}ms ${transitionFunc}`;
 
   function showSlide(slide) {
     if (items.length < 1) return;
@@ -78,6 +104,8 @@ export default function ImageSlider(...imageSources) {
       translateX(-45%)`;
     }
     items[currentSlide].style.transform = '';
+
+    selectedCircle(currentSlide);
   }
 
   function nextSlide() {
@@ -98,40 +126,86 @@ export default function ImageSlider(...imageSources) {
       showSlide(items.length - 1);
       return;
     }
-    // show next slide
+    // show previous slide
     showSlide(currentSlide - 1);
   }
 
   // sliding buttons
   const previous = document.createElement('div');
-  previous.innerHTML = `<svg xmlns=
-  "http://www.w3.org/2000/svg" height="48" 
-  width="48"><path d="M28.05 36 16 23.95 28.05 
+  previous.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" 
+  height="48" width="48" viewBox ="0 0 48 48" >
+  <path d="M28.05 36 16 23.95 28.05 
   11.9l2.15 2.15-9.9 9.9 9.9 9.9Z"/></svg>`;
   previous.style.position = 'absolute';
-  previous.style.top = '50%';
-  previous.style.left = '0';
+  previous.style.top = 'calc(50% - 24px';
+  previous.style.left = '12%';
+  previous.firstChild.style.width = '100%';
+  previous.firstChild.style.height = '100%';
+  previous.style.width = '10%';
+  previous.style.height = '10%';
+  previous.firstChild.style.fill = controlsColors;
 
   const next = document.createElement('div');
-  next.innerHTML = `<svg xmlns=
-  "http://www.w3.org/2000/svg" height="48" 
-  width="48"><path d="m18.75 36-2.15-2.15 
+  next.innerHTML = `<svg xmlns= "http://www.w3.org/2000/svg" 
+  height="48" width="48" viewBox ="0 0 48 48">
+  <path d="m18.75 36-2.15-2.15 
   9.9-9.9-9.9-9.9 2.15-2.15L30.8 23.95Z"/></svg>`;
   next.style.position = 'absolute';
-  next.style.top = '50%';
-  next.style.right = '0';
+  next.style.top = 'calc(50% - 24px';
+  next.style.right = '12%';
+  next.firstChild.style.width = '100%';
+  next.firstChild.style.height = '100%';
+  next.style.width = '10%';
+  next.style.height = '10%';
+  next.firstChild.style.fill = controlsColors;
 
+  // circles representing the slides for quick navigation
   const sliderCircles = document.createElement('div');
-  sliderCircles.style.backgroundColor = '#101010';
+  sliderCircles.style.display = 'flex';
+  sliderCircles.style.gap = '12px';
+  sliderCircles.style.justifyContent = 'center';
+  sliderCircles.style.alignItems = 'center';
   sliderCircles.style.height = '5%';
 
+  const circles = []
+  for (let i = 0; i < items.length; i++) {
+    const circle = document.createElement('div');
+    circle.style.height = '50%';
+    circle.style.minHeight = '12px'
+    circle.style.aspectRatio = '1 / 1';
+    circle.style.borderRadius = '50%';
+    circle.style.border = `1px solid ${controlsColors}`;
+    circle.style.transition = `background 
+    ${transitionSpeed}ms ${transitionFunc}`;
+    circle.onclick = () => {
+      showSlide(i);
+    }
+    sliderCircles.appendChild(circle);
+    circles.push(circle);
+  }
+
+  function selectedCircle (slideNumber) {
+    
+    // reseting any circle selected
+    circles.forEach((circle) => {
+      circle.style.backgroundColor = '';
+    });
+
+    // setting new circle selection
+    circles[slideNumber].style.backgroundColor = controlsColors;
+  }
+
+  // binding buttons
   next.onclick = nextSlide;
   previous.onclick = previousSlide;
 
   slider.append(previous, next, sliderCircles);
 
   setTimeout(() => showSlide(currentSlide), 10);
-  // setInterval(nextSlide, 5000);
+  
+  if (typeof slidingTimer === `number`) {
+    setInterval(nextSlide, slidingTimer);
+  }
 
   return slider;
 }

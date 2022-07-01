@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "A module for creating image sliders inside Javascript",
   "main": "./src/index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -13,7 +13,9 @@
   "keywords": [
     "image-slider",
     "image",
-    "slider"
+    "slider",
+    "image-carousel",
+    "carousel"
   ],
   "author": "karim04",
   "license": "ISC",
